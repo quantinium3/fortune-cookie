@@ -15,16 +15,20 @@
       in
       {
         packages.default = pkgs.rustPlatform.buildRustPackage rec {
-          pname = "fortune-cookie";
+          pname = "fortune-cookie-${version}";
           version = "0.1.0";
-          src = ./.;
+          src = pkgs.lib.sourceByRegex ./. [
+            "Cargo\.lock"
+            "Cargo\.toml"
+            "src"
+            "src/bin"
+            ".*\.rs$"
+          ];
           cargoLock = { lockFile = ./Cargo.lock; };
-          buildInputs = with pkgs; [ openssl pkg-config ];
+          buildInputs = with pkgs; [ openssl ];
 
-          PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
           OPENSSL_DIR = "${pkgs.openssl.dev}";
           OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
-          OPENSSL_INCLUDE_DIR = "${pkgs.openssl.dev}/include";
         };
       });
 }
