@@ -28,7 +28,6 @@ async fn get_fortune() -> Result<Json<Message>, StatusCode> {
         .json::<Fortune>()
         .await
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
-    //
 
     Ok(Json(Message {
         message: body.fortune,
