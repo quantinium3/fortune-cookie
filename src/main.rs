@@ -1,14 +1,14 @@
-use axum::{Router, routing::get, response::Json};
-use serde::{Serialize, Deserialize};
+use axum::{Router, response::Json, routing::get};
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize)]
 struct Message {
-    message: String
+    message: String,
 }
 
 #[derive(Deserialize)]
 struct Fortune {
-    fortune: String
+    fortune: String,
 }
 
 #[tokio::main]
@@ -28,6 +28,6 @@ async fn get_fortune() -> Result<Json<Message>, axum::http::StatusCode> {
         .map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR)?;
 
     Ok(Json(Message {
-        message: body.fortune
+        message: body.fortune,
     }))
 }
