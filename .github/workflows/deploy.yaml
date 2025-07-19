@@ -22,7 +22,7 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - name: Build Rust backend
-        run: nix build .#fortune-cookie --out-link result
+        run: nix build .#default --out-link result
 
       - name: Push to Cachix
         run: nix path-info --all | cachix push quantinium3
@@ -32,4 +32,4 @@ jobs:
         with:
           token: ${{ secrets.REPO_DISPATCH_TOKEN }}
           repository: quantinium3/nixie
-          event-type: backend_updated
+          event-type: fortune_cookie_updated
