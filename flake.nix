@@ -17,15 +17,14 @@
         packages.default = pkgs.rustPlatform.buildRustPackage rec {
           pname = "fortune-cookie-${version}";
           version = "0.1.0";
-          src = pkgs.fetchFromGitHub {
-            owner = "quantinium3";
-            repo = "fortune-cookie";
-            rev = "main";
-            sha256 = "sha256-uhMwLCa/OVoMNI26of29BVaRcEUSlVerg1nLQuvSrjE=";
-          };
-          cargoLock = {
-            lockFile = "${src}/Cargo.lock";
-          };
+          src = pkgs.lib.sourceByRegex ./. [
+            "Cargo\.lock"
+            "Cargo\.toml"
+            "src"
+            "src/bin"
+            ".*\.rs$"
+          ];
+          cargoLock = { lockFile = ./Cargo.lock; };
           buildInputs = with pkgs; [ openssl ];
 
           OPENSSL_DIR = "${pkgs.openssl.dev}";
