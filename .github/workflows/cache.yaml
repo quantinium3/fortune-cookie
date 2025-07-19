@@ -1,0 +1,29 @@
+name: build and cache fortune
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: install nix and cachix action
+        uses: cachix/install-nix-action@v31
+
+        uses: cachix/cachix-action@v15
+        with:
+          name: quantinium3
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+        run: nix build .#default
+        run: cachix push quantinium3 ./result
+#      - name: Trigger NixOS deployment
+#        uses: peter-evans/repository-dispatch@v3
+#        with:
+#          token: ${{ secrets.REPO_DISPATCH_TOKEN }}
+#          repository: quantinium3/nixie
+#          event-type: fortune_cookie_updated
