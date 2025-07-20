@@ -24,10 +24,10 @@
             sha256 = "sha256-ehkM8XvKHysYVaH5xdleVsatCtSfUrWxOC/9ADakGbg="; # replace with the hash we got earlier
           };
           cargoLock = { lockFile = ./Cargo.lock; };
+          nativeBuildInputs = with pkgs; [ pkg-config ];
           buildInputs = with pkgs; [ openssl ];
-
-          OPENSSL_DIR = "${pkgs.openssl.dev}";
-          OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
+          /* OPENSSL_DIR = "${pkgs.openssl.dev}";
+          OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib"; */
         };
       });
 }
