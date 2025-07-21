@@ -19,7 +19,7 @@
             rev = "f9fb77497c01cfff0a68146f4cf4884e8ddf9145";
             sha256 = "sha256-mKVzDicZVDb7n/zFQ7Fx1t2IUd+pW/pIz/r5UlWcfSQ=";
           };
-          cargoLock = { lockFile = ./Cargo.lock; };
+          cargoHash = "sha256-ASRlHxodqd2/6ZNzADCftrkJS8v6bonlyLI/RtjxGn0=";
           nativeBuildInputs = with pkgs; [ pkg-config ];
           buildInputs = with pkgs; [ openssl ];
         };
