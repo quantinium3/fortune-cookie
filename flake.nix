@@ -1,11 +1,9 @@
 {
   description = "Fortune cookie backend";
-
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
   };
-
   outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
@@ -29,16 +27,16 @@
       {
         packages.default = fortune-cookie;
         packages.fortune-cookie = fortune-cookie;
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [ rustc cargo pkg-config openssl ];
+        };
       }
     ) // {
-      nixosModules.fortune-cookie = { config, pkgs, ... }: {
+      nixosModules.fortune-cookie = { config, pkgs, lib, ... }: {
         options.services.fortune-cookie = {
-          enable = pkgs.lib.mkEnableOption "Fortune Cookie Backend service";
+          enable = lib.mkEnableOption "Fortune Cookie Backend service";
         };
-
-        config = pkgs.lib.mkIf config.services.fortune-cookie.enable {
-          environment.systemPackages = [ self.packages.${pkgs.system}.fortune-cookie ];
-
+        config = lib.mkIf config.services.fortune-cookie.enable {
           systemd.services.fortune-cookie = {
             description = "Fortune Cookie Backend";
             after = [ "network.target" ];
@@ -46,10 +44,16 @@
             serviceConfig = {
               ExecStart = "${self.packages.${pkgs.system}.fortune-cookie}/bin/fortune-cookie";
               Restart = "always";
+              RestartSec = "10s";
               StandardOutput = "journal";
               StandardError = "journal";
-              User = "fortune";
-              DynamicUser = true; 
+              User = "fortune-cookie";
+              Group = "fortune-cookie";
+              DynamicUser = true;
+              NoNewPrivileges = true;
+              PrivateTmp = true;
+              ProtectSystem = "strict";
+              ProtectHome = true;
             };
           };
         };
